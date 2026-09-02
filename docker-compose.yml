@@ -1,9 +1,6 @@
-version: '3.8'
-
 services:
-  # Express Backend API
   backend:
-    build: ./backend
+    build: ./task-tracker-backend
     container_name: todo-backend
     restart: always
     ports:
@@ -11,9 +8,8 @@ services:
     environment:
       - PORT=5000
 
-  # React / Vite Frontend
   frontend:
-    build: ./frontend
+    build: ./task-tracker-frontend
     container_name: todo-frontend
     restart: always
     ports:
@@ -21,11 +17,10 @@ services:
     depends_on:
       - backend
 
-  # Cloudflare Tunnel Service
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: cloudflare-tunnel
     restart: always
-    command: tunnel --no-autoupdate run
-    environment:
-      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    command: tunnel --url http://todo-frontend:80
+    depends_on:
+      - frontend
