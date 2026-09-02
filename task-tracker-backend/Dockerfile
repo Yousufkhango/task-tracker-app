@@ -8,6 +8,9 @@ RUN npm install
 
 COPY . .
 
+# Generate the Prisma Client binaries for Alpine Linux
+RUN npx prisma generate
+
 EXPOSE 5000
 
 CMD ["node", "server.js"]
